@@ -1,0 +1,9 @@
+.gradle/
+.gradletasknamecache
+*.iml
+*.ipr
+*.iws
+build/
+deploy.sh
+lastrun.json
+NexusMonitorConfig.groovy

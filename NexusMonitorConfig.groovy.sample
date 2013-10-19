@@ -1,0 +1,30 @@
+def globalRecipients = [
+    'somebody@example.com'
+]
+nexusmonitor.feeds = [
+    new Repository(
+        name: 'repo1',
+        feedUrl: 'http://domain/nexus/service/local/feeds/',
+        repoUrl: 'http://domain/nexus/content/repositories/public/',
+        recipients: globalRecipients + []
+    ),
+    new Repository(
+        name: 'repo2',
+        feedUrl: 'http://otherdomain/nexus/service/local/feeds/',
+        repoUrl: 'http://otherdomain/nexus/content/repositories/public/',
+        recipients: globalRecipients + []
+    )
+]
+
+nexusmonitor {
+  mail {
+    host = 'smtp.example.com'
+    port = 587
+    username = 'user@example.com'
+    password = 'password'
+    javaMailProperties = [
+        'mail.smtp.auth' : true,
+        'mail.smtp.starttls.enable' : false
+    ]
+  }
+}
