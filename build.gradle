@@ -41,3 +41,12 @@ dependencies {
   // 'test.useTestNG()' to your build script.
   testCompile "junit:junit:4.11"
 }
+
+task uberjar(type: Jar) {
+    from files(sourceSets.main.output.classesDir)
+    from configurations.runtime.asFileTree.files.collect { zipTree(it) }
+
+    manifest {
+        attributes 'Main-Class': 'SendEmail'
+    }
+}
