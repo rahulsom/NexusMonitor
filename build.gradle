@@ -12,6 +12,7 @@ apply plugin: 'java'
 apply plugin: 'groovy'
 apply plugin: 'idea'
 apply plugin: 'application'
+apply plugin: 'maven'
 
 mainClassName = "SendEmail"
 
@@ -43,10 +44,35 @@ dependencies {
 }
 
 task uberjar(type: Jar) {
-    from files(sourceSets.main.output.classesDir)
-    from configurations.runtime.asFileTree.files.collect { zipTree(it) }
+  from files(sourceSets.main.output.classesDir)
+  from configurations.runtime.asFileTree.files.collect { zipTree(it) }
 
-    manifest {
-        attributes 'Main-Class': 'SendEmail'
+  manifest {
+    attributes 'Main-Class': 'SendEmail'
+  }
+}
+
+artifacts {
+  archives uberjar
+}
+
+repositories {
+  maven {
+    url "https://oss.sonatype.org/content/repositories/snapshots"
+  }
+}
+
+def env = System.getenv()
+
+uploadArchives {
+  repositories {
+    mavenDeployer {
+      repository(url: "https://oss.sonatype.org/content/repositories/snapshots") {
+        authentication(userName: env['BINTRAY_USER'], password: env['BINTRAY_PASS'])
+      }
+      pom.version = "1.0-SNAPSHOT"
+      pom.artifactId = "nexus-monitor"
+      pom.groupId = "com.github.rahulsom"
     }
+  }
 }
