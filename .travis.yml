@@ -1,8 +1,6 @@
 language: groovy
-
 env:
   global:
-    - secure: "kMRWh+Yq1YtAPJ3mU2RoBmzyu0XI7pOu+DSs++47GcjFtVaNx+dombL+U2Il\nIo9IaC4dR1byMBWXiEWi0mShefhHnh1lP4WNJRD+iT9KMH6jGCBBCR11i/9K\njORHdC6e36fOvW5656BUXvLRT/OfopQVFP9fyVDq1hOjkhT7yGM="
-    - BINTRAY_USER=rahulsom
-
+  - secure: WAX4VrcKkYvm16gxMPXkjA7r4vKg6B/EsZQyaQ/zGylRp5MnnRkdujzUPYvRyO/Gq7zjzqBhEP/LhML2H05cQ8IbMZEqZbGlb6s7BmCAbj+czgxeXyQCaf2PAp9QwCcQJ7FDHUjUi64LBMaDZLqbe/5wUD6jtkJ8UqLpoY1g8ns=
+  - secure: KseuQy9yppMw4DvkNgtV2vp/VLaf1tUIwHWdXq5QqrHzCDFMU0dJePhfd3N7xW4zVUMlDOV0/m857m03BTe8av5PVRKxjVe617fkWq2oDDQp3Wrns2XmUG0kjgYsnccAphKRjtsTc7aQuXa2LLayuzgT2z2jFVm6Kpbua5sd/7A=
 script: ./build.sh
