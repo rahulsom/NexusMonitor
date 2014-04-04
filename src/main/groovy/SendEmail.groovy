@@ -101,7 +101,16 @@ class SendEmail {
   def notifyOfBuild(Map artifact, Repository repository) {
     def msg = mailSender.createMimeMessage()
     def helper = new MimeMessageHelper(msg)
-    helper.setFrom 'nexus@certifydatasystems.com', 'Nexus'
+    if (config.nexusmonitor.from) {
+      if (config.nexusmonitor.from.address) {
+        if (config.nexusmonitor.from.personal) {
+          helper.setFrom config.nexusmonitor.from.address, config.nexusmonitor.from.personal
+        } else {
+          helper.setFrom config.nexusmonitor.from.address
+        }
+      }
+    }
+
     repository.recipients.each {
       helper.addTo (it)
     }
@@ -141,7 +150,7 @@ class SendEmail {
   GPathResult getRecentReleases(Repository repository) {
     def feedHome = repository.feedUrl
     def builder = new HTTPBuilder(feedHome)
-    builder.auth.basic 'admin', 'admin123'
+    builder.auth.basic repository.username, repository.password
     def bais = builder.get(path: 'recentlyDeployedReleaseArtifacts')
     new XmlSlurper().parse(bais)
   }

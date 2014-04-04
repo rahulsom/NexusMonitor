@@ -17,6 +17,10 @@ nexusmonitor.feeds = [
 ]
 
 nexusmonitor {
+  from {
+    address = 'nexus@example.com'
+    personal = 'Nexus'
+  }
   mail {
     host = 'smtp.example.com'
     port = 587
