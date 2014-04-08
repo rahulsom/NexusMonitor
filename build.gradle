@@ -14,6 +14,18 @@ apply plugin: 'idea'
 apply plugin: 'application'
 apply plugin: 'maven'
 
+buildscript {
+  repositories {
+    mavenCentral()
+  }
+
+  dependencies {
+    classpath 'eu.appsatori:gradle-fatjar-plugin:0.2-rc1'
+  }
+}
+
+apply plugin: 'fatjar'
+
 mainClassName = "SendEmail"
 
 // In this section you declare where to find the dependencies of your project
@@ -43,17 +55,14 @@ dependencies {
   testCompile "junit:junit:4.11"
 }
 
-task uberjar(type: Jar) {
-  from files(sourceSets.main.output.classesDir)
-  from configurations.runtime.asFileTree.files.collect { zipTree(it) }
-
+fatJar {
   manifest {
     attributes 'Main-Class': 'SendEmail'
   }
 }
 
 artifacts {
-  archives uberjar
+  archives fatJar
 }
 
 repositories {

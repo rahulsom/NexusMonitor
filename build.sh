@@ -5,8 +5,8 @@ if [ "$TRAVIS_PULL_REQUEST" = false ]; then
   if [ "$TRAVIS_BRANCH" = "master" ]; then
     ./gradlew uploadArchives
   else
-  	./gradlew uberjar
+    ./gradlew fatJar
   fi
 else
-  ./gradlew uberjar
+  ./gradlew fatJar
 fi
