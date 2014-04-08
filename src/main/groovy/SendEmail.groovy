@@ -98,7 +98,7 @@ class SendEmail {
     notifyOfBuild(artifact, repository)
   }
 
-  def notifyOfBuild(Map artifact, Repository repository) {
+  void notifyOfBuild(Map artifact, Repository repository) {
     def msg = mailSender.createMimeMessage()
     def helper = new MimeMessageHelper(msg)
     if (config.nexusmonitor.from) {
@@ -126,6 +126,7 @@ class SendEmail {
 
     helper.setText(newText, true)
     mailSender.send(msg)
+    println "[${artifact.repo}] Mailing ${repository.recipients} about ${artifact.project} ${artifact.version}"
   }
 
   Reader getTemplate(String repoName) {
