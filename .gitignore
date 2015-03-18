@@ -7,3 +7,5 @@ build/
 deploy.sh
 lastrun.json
 NexusMonitorConfig.groovy
+.idea
+gradle.properties

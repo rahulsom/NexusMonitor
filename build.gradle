@@ -8,12 +8,6 @@
  */
 
 // Apply the java plugin to add support for Java
-apply plugin: 'java'
-apply plugin: 'groovy'
-apply plugin: 'idea'
-apply plugin: 'application'
-apply plugin: 'maven'
-
 buildscript {
   repositories {
     mavenCentral()
@@ -25,6 +19,16 @@ buildscript {
 }
 
 apply plugin: 'fatjar'
+apply plugin: 'java'
+apply plugin: 'groovy'
+apply plugin: 'idea'
+apply plugin: 'application'
+apply plugin: 'maven'
+apply plugin: 'signing'
+
+groupId = "com.github.rahulsom"
+artifactId = "nexus-monitor"
+version = "1.0-SNAPSHOT"
 
 mainClassName = "SendEmail"
 
@@ -61,8 +65,20 @@ fatJar {
   }
 }
 
+task sourcesJar(type: Jar, dependsOn: classes) {
+  classifier = 'sources'
+  from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+  classifier = 'javadoc'
+  from javadoc.destinationDir
+}
+
 artifacts {
   archives fatJar
+  archives sourcesJar
+  archives javadocJar
 }
 
 repositories {
@@ -73,15 +89,52 @@ repositories {
 
 def env = System.getenv()
 
+signing {
+  sign configurations.archives
+}
+
 uploadArchives {
   repositories {
     mavenDeployer {
-      repository(url: "https://oss.sonatype.org/content/repositories/snapshots") {
+      beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+      repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
         authentication(userName: env['BINTRAY_USER'], password: env['BINTRAY_PASS'])
       }
-      pom.version = "1.0-SNAPSHOT"
-      pom.artifactId = "nexus-monitor"
-      pom.groupId = "com.github.rahulsom"
+
+      snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots") {
+        authentication(userName: env['BINTRAY_USER'], password: env['BINTRAY_PASS'])
+      }
+
+      pom.project {
+        name 'NexusMonitor'
+        packaging 'jar'
+        groupId groupId
+        artifactId artifactId
+        description 'NexusMonitor allows you to send custom email on artifact deploys'
+        url 'http://github.com/rahulsom/NexusMonitor'
+
+        scm {
+          url 'scm:git@github.com:rahulsom/NexusMonitor.git'
+          connection 'scm:git@github.com:rahulsom/NexusMonitor.git'
+          developerConnection 'scm:git@github.com:rahulsom/NexusMonitor.git'
+        }
+
+        licenses {
+          license {
+            name 'The Apache Software License, Version 2.0'
+            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+            distribution 'repo'
+          }
+        }
+
+        developers {
+          developer {
+            id 'rahulsom'
+            name 'Rahul Somasunderam'
+          }
+        }
+      }
     }
   }
 }
