@@ -28,7 +28,7 @@ apply plugin: 'signing'
 
 groupId = "com.github.rahulsom"
 artifactId = "nexus-monitor"
-version = "1.0"
+version = "1.1-SNAPSHOT"
 
 mainClassName = "SendEmail"
 
