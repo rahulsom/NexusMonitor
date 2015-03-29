@@ -1,3 +1,4 @@
+sudo: false
 language: groovy
 env:
   global:
@@ -5,9 +6,6 @@ env:
   - secure: KseuQy9yppMw4DvkNgtV2vp/VLaf1tUIwHWdXq5QqrHzCDFMU0dJePhfd3N7xW4zVUMlDOV0/m857m03BTe8av5PVRKxjVe617fkWq2oDDQp3Wrns2XmUG0kjgYsnccAphKRjtsTc7aQuXa2LLayuzgT2z2jFVm6Kpbua5sd/7A=
 script: "./build.sh"
 before_install:
-- openssl aes-256-cbc -K $encrypted_ffdb706b328d_key -iv $encrypted_ffdb706b328d_iv
-  -in gradle.properties.enc -out gradle.properties -d
-- openssl aes-256-cbc -K $encrypted_ffdb706b328d_key -iv $encrypted_ffdb706b328d_iv
-  -in pubring.gpg.enc -out pubring.gpg -d
-- openssl aes-256-cbc -K $encrypted_ffdb706b328d_key -iv $encrypted_ffdb706b328d_iv
-  -in secring.gpg.enc -out secring.gpg -d
+- openssl aes-256-cbc -K $encrypted_ffdb706b328d_key -iv $encrypted_ffdb706b328d_iv -in gradle.properties.enc -out gradle.properties -d
+- openssl aes-256-cbc -K $encrypted_ffdb706b328d_key -iv $encrypted_ffdb706b328d_iv -in pubring.gpg.enc -out pubring.gpg -d
+- openssl aes-256-cbc -K $encrypted_ffdb706b328d_key -iv $encrypted_ffdb706b328d_iv -in secring.gpg.enc -out secring.gpg -d
