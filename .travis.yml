@@ -9,3 +9,7 @@ before_install:
 - openssl aes-256-cbc -K $encrypted_ffdb706b328d_key -iv $encrypted_ffdb706b328d_iv -in gradle.properties.enc -out gradle.properties -d
 - openssl aes-256-cbc -K $encrypted_ffdb706b328d_key -iv $encrypted_ffdb706b328d_iv -in pubring.gpg.enc -out pubring.gpg -d
 - openssl aes-256-cbc -K $encrypted_ffdb706b328d_key -iv $encrypted_ffdb706b328d_iv -in secring.gpg.enc -out secring.gpg -d
+cache:
+  directories:
+    - $HOME/.m2/repository
+    - $HOME/.gradle/caches
