@@ -11,3 +11,4 @@ NexusMonitorConfig.groovy
 gradle.properties
 *.gpg
 gradle.properties
+secrets.tar
