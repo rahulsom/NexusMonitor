@@ -11,6 +11,7 @@
 buildscript {
   repositories {
     mavenCentral()
+    maven {url "https://repo1.maven.org/maven2"}
   }
 
   dependencies {
@@ -37,6 +38,7 @@ repositories {
   // Use 'maven central' for resolving your dependencies.
   // You can declare any Maven/Ivy/file repository here.
   mavenCentral()
+  maven {url "https://repo1.maven.org/maven2"}
 }
 
 // In this section you declare the dependencies for your production and test code
