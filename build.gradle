@@ -9,6 +9,8 @@ plugins {
 }
 
 group = "com.github.rahulsom"
+description = "Notify on new releases from Sonatype Nexus"
+
 contacts {
   validateEmails = true
   'rahulsom@noreply.github.com' {
