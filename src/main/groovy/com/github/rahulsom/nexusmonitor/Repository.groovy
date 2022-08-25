@@ -1,3 +1,5 @@
+package com.github.rahulsom.nexusmonitor
+
 import groovy.transform.CompileStatic
 
 /**
@@ -17,14 +19,14 @@ class Repository {
   List<String> recipients
 
 
-  public java.lang.String toString() {
-    return "Repository{" +
+  String toString() {
+    return "com.github.rahulsom.nexusmonitor.Repository{" +
         "name='" + name + '\'' +
         ", feedUrl='" + feedUrl + '\'' +
         ", username='" + username + '\'' +
         ", password='" + password + '\'' +
         ", repoUrl='" + repoUrl + '\'' +
         ", recipients=" + recipients +
-        '}';
+        '}'
   }
 }

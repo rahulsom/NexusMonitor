@@ -1,29 +1,46 @@
-import groovy.text.SimpleTemplateEngine
-import org.springframework.mail.MailSender
-import org.springframework.mail.javamail.JavaMailSenderImpl
-import org.springframework.mail.javamail.MimeMessageHelper
-import groovyx.net.http.HTTPBuilder
+package com.github.rahulsom.nexusmonitor
+
 import groovy.json.JsonBuilder
 import groovy.json.JsonSlurper
+import groovy.text.SimpleTemplateEngine
 import groovy.util.slurpersupport.GPathResult
+import groovyx.net.http.HTTPBuilder
+import org.springframework.mail.javamail.JavaMailSender
+import org.springframework.mail.javamail.JavaMailSenderImpl
+import org.springframework.mail.javamail.MimeMessageHelper
+
 import java.text.SimpleDateFormat
 
 class SendEmail {
   private static final String Iso8601Format = "yyyy-MM-dd'T'HH:mm:ss'Z'"
+  private final File root
+  private final JavaMailSender mailSender
+  private final ConfigObject config
 
-  public static void main(String[] args) {
-    new SendEmail().run()
+  static void main(String[] args) {
+    SendEmail sendEmail = args.length == 1 ? new SendEmail(args[0]) : new SendEmail()
+    sendEmail.run()
   }
 
-  final MailSender mailSender
+  SendEmail() {
+    this(null)
+  }
 
-  final config = new ConfigSlurper().parse(new File('NexusMonitorConfig.groovy').toURL())
+  SendEmail(String root) {
+    if (root == null) {
+      this.root = new File(".")
+    } else {
+      this.root = new File(root)
+    }
+    config = new ConfigSlurper().parse(new File(this.root, 'NexusMonitorConfig.groovy').toURI().toURL())
+    mailSender = initMailSender()
+  }
 
   def run () {
-
+    println("root     : ${root}")
     def feeds = config.nexusmonitor.feeds
 
-    def lastRunFile = new File('lastrun.json')
+    def lastRunFile = new File(root, 'lastrun.json')
     def lastRun = lastRunFile.exists() ? new JsonSlurper().parseText(lastRunFile.text) : [:]
     feeds.each { repository ->
       println "Name     : ${repository.name}"
@@ -31,7 +48,7 @@ class SendEmail {
       def rss = getRecentReleases(repository)
       println "Feed Date: ${rss.channel.date}"
       def lastRunTime = lastRun[repository.name] ?
-        new SimpleDateFormat(Iso8601Format).parse(lastRun[repository.name]) :
+        new SimpleDateFormat(Iso8601Format).parse(lastRun[repository.name] as String) :
         new Date(0)
       rss.channel.item.each {
         def itemTime = new SimpleDateFormat(Iso8601Format).parse(it.date.toString())
@@ -43,7 +60,7 @@ class SendEmail {
             } else {
               processFile(pomUrl, repository, it.title.toString())
             }
-          } catch (java.io.FileNotFoundException e) {
+          } catch (FileNotFoundException e) {
             println e.message
           } catch (Exception e) {
             e.printStackTrace()
@@ -132,24 +149,19 @@ class SendEmail {
   Reader getTemplate(String repoName) {
     try {
       new File("${repoName}.html").newReader()
-    } catch (Exception) {
+    } catch (Exception ignored) {
       println "No template found for ${repoName}. Using default."
       this.class.classLoader.getResourceAsStream('basic.html').newReader()
     }
   }
 
-  SendEmail() {
-    mailSender = initMailSender()
-  }
-
   private JavaMailSenderImpl initMailSender() {
-    new JavaMailSenderImpl(
-        config.nexusmonitor.mail
-    )
+    new JavaMailSenderImpl(config.nexusmonitor.mail)
   }
 
-  GPathResult getRecentReleases(Repository repository) {
+  static GPathResult getRecentReleases(Repository repository) {
     def feedHome = repository.feedUrl
+    println "feedHome : $feedHome"
     def builder = new HTTPBuilder(feedHome)
     builder.auth.basic repository.username, repository.password
     def bais = builder.get(path: 'recentlyDeployedReleaseArtifacts')
