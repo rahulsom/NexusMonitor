@@ -37,7 +37,7 @@ dependencies {
   implementation 'commons-codec:commons-codec:1.8'
   implementation 'commons-io:commons-io:2.4'
   implementation 'org.codehaus.groovy.modules.http-builder:http-builder:0.6'
-  implementation 'org.codehaus.groovy:groovy-all:2.4.0'
+  implementation 'org.codehaus.groovy:groovy-all:2.5.18'
 
   testImplementation "org.spockframework:spock-core:1.3-groovy-2.4"
   testImplementation 'com.github.kristofa:mock-http-server:4.1'
