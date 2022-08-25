@@ -23,9 +23,10 @@ class SendEmailTest extends Specification {
     thrown(FileNotFoundException)
   }
 
-  String createConfig() {
+  String createConfig(int mailPort, int httpPort) {
+    println "mailPort: ${mailPort}, httpPort: ${httpPort}"
     // language=groovy
-    '''
+    """
         import com.github.rahulsom.nexusmonitor.Repository
 
         def globalRecipients = [
@@ -35,8 +36,8 @@ class SendEmailTest extends Specification {
         nexusmonitor.feeds = [
             new Repository(
                 name: 'repo1',
-                feedUrl: 'http://localhost:8081/nexus/service/local/feeds/',
-                repoUrl: 'http://localhost:8081/nexus/content/repositories/public/',
+                feedUrl: 'http://localhost:${httpPort}/nexus/service/local/feeds/',
+                repoUrl: 'http://localhost:${httpPort}/nexus/content/repositories/public/',
                 recipients: globalRecipients + []
             )
         ]
@@ -48,23 +49,31 @@ class SendEmailTest extends Specification {
           }
           mail {
             host = 'localhost'
-            port = 1587
+            port = $mailPort
           }
         }
-        '''
+        """.toString()
+  }
+
+  int randomPort() {
+    ServerSocket s = new ServerSocket(0)
+    def port = s.getLocalPort()
+    s.close()
+    println "port: ${port}"
+    return port
   }
 
   void "test change found on new instance"() {
     given:
     def responseProvider = new SimpleHttpResponseProvider()
-    def server = new MockHttpServer(8081, responseProvider)
-    def wiser = new Wiser()
-    wiser.port = 1587
-    wiser.start()
+    def server = new MockHttpServer(randomPort(), responseProvider)
     server.start()
+    def wiser = new Wiser()
+    int wiserPort = randomPort()
+    wiser.port = wiserPort
+    wiser.start()
     def tempDir = Files.createTempDirectory("nexusmonitor").toFile()
-    new File(tempDir, 'NexusMonitorConfig.groovy').text =
-        createConfig()
+    new File(tempDir, 'NexusMonitorConfig.groovy').text = createConfig(wiserPort, server.port)
 
     when:
     responseProvider.expect(Method.GET, "/nexus/service/local/feeds/recentlyDeployedReleaseArtifacts")
@@ -100,14 +109,14 @@ class SendEmailTest extends Specification {
   void "test change found on existing instance"() {
     given:
     def responseProvider = new SimpleHttpResponseProvider()
-    def server = new MockHttpServer(8081, responseProvider)
-    def wiser = new Wiser()
-    wiser.port = 1587
-    wiser.start()
+    def server = new MockHttpServer(randomPort(), responseProvider)
     server.start()
+    def wiser = new Wiser()
+    int wiserPort = randomPort()
+    wiser.port = wiserPort
+    wiser.start()
     def tempDir = Files.createTempDirectory("nexusmonitor").toFile()
-    new File(tempDir, 'NexusMonitorConfig.groovy').text =
-        createConfig()
+    new File(tempDir, 'NexusMonitorConfig.groovy').text = createConfig(wiserPort, server.port)
     new File(tempDir, 'lastrun.json').text = new JsonBuilder(["repo1": "2022-10-03T12:34:56Z"]).toPrettyString()
 
     when:
