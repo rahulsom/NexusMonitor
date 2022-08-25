@@ -37,7 +37,7 @@ dependencies {
   implementation 'javax.mail:mail:1.4.7'
   implementation 'org.jsoup:jsoup:1.15.3'
   implementation 'commons-codec:commons-codec:1.15'
-  implementation 'commons-io:commons-io:2.4'
+  implementation 'commons-io:commons-io:2.11.0'
   implementation 'org.codehaus.groovy.modules.http-builder:http-builder:0.6'
   implementation 'org.codehaus.groovy:groovy:2.5.18'
   implementation 'org.codehaus.groovy:groovy-xml:2.5.18'
