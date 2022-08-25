@@ -8,7 +8,6 @@ deploy.sh
 lastrun.json
 NexusMonitorConfig.groovy
 .idea
-gradle.properties
 *.gpg
-gradle.properties
 secrets.tar
+/out
