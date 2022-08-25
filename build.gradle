@@ -32,7 +32,7 @@ repositories {
 // In this section you declare the dependencies for your production and test code
 dependencies {
   // The production code uses the SLF4J logging API at compile time
-  implementation 'org.slf4j:slf4j-api:1.7.36'
+  implementation 'org.slf4j:slf4j-api:2.0.0'
   implementation 'org.springframework:spring:2.5.6'
   implementation 'javax.mail:mail:1.4.7'
   implementation 'org.jsoup:jsoup:1.15.3'
