@@ -4,7 +4,7 @@ plugins {
   id "application"
   id 'com.github.johnrengelman.shadow' version '7.1.2'
 
-  id("com.github.rahulsom.waena.root").version("0.3.1")
+  id("com.github.rahulsom.waena.root").version("0.6.1")
   id("com.github.rahulsom.waena.published").version("0.3.1")
 }
 
