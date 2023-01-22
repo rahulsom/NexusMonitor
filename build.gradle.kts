@@ -45,11 +45,11 @@ dependencies {
   implementation("org.codehaus.groovy:groovy-json:2.5.21")
   implementation("org.codehaus.groovy:groovy-templates:2.5.21")
 
-  testImplementation("org.spockframework:spock-core:1.3-groovy-2.5")
+  testImplementation("org.spockframework:spock-core:2.0-groovy-2.5")
   testImplementation("com.github.kristofa:mock-http-server:4.1")
   testImplementation("org.subethamail:subethasmtp-wiser:1.2")
 }
 
-//tasks.withType<Test> {
-//  useJUnitPlatform()
-//}
+tasks.withType<Test> {
+  useJUnitPlatform()
+}
