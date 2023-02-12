@@ -34,7 +34,7 @@ repositories {
 dependencies {
   // The production code uses the SLF4J logging API at compile time
   implementation("org.slf4j:slf4j-api:2.0.6")
-  implementation("org.springframework:spring-context-support:5.3.25")
+  implementation("org.springframework:spring-context-support:6.0.4")
   implementation("javax.mail:mail:1.4.7")
   implementation("org.jsoup:jsoup:1.15.3")
   implementation("commons-codec:commons-codec:1.15")
